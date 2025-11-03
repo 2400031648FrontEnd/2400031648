@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CivicConnect - Citizen & Politician Interaction</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #004aad;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #e0e0e0;
+      padding: 0.5rem;
+    }
+    nav button {
+      margin: 0 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      background: #004aad;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    nav button:hover {
+      background: #00357d;
+    }
+    section {
+      display: none;
+      padding: 1.5rem;
+    }
+    section.active {
+      display: block;
+    }
+    h2 {
+      color: #004aad;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    input, textarea, select, button.action {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button.action {
+      background: #004aad;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    button.action:hover {
+      background: #00357d;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🗳️ CivicConnect</h1>
+    <p>Improving communication between Citizens and Politicians</p>
+  </header>
+
+  <nav>
+    <button onclick="showTab('citizen')">Citizen</button>
+    <button onclick="showTab('politician')">Politician</button>
+    <button onclick="showTab('moderator')">Moderator</button>
+    <button onclick="showTab('admin')">Admin</button>
+  </nav>
+
+  <!-- Citizen Section -->
+  <section id="citizen" class="active">
+    <h2>Citizen Dashboard</h2>
+    <div class="card">
+      <h3>Report an Issue</h3>
+      <input type="text" id="issueTitle" placeholder="Issue Title" />
+      <textarea id="issueDesc" placeholder="Describe your issue..."></textarea>
+      <select id="issueCategory">
+        <option value="">Select Category</option>
+        <option>Roads & Infrastructure</option>
+        <option>Water & Sanitation</option>
+        <option>Public Safety</option>
+        <option>Education</option>
+      </select>
+      <button class="action" onclick="submitIssue()">Submit Issue</button>
+    </div>
+
+    <div class="card">
+      <h3>My Reported Issues</h3>
+      <ul id="issueList"></ul>
+    </div>
+  </section>
+
+  <!-- Politician Section -->
+  <section id="politician">
+    <h2>Politician Dashboard</h2>
+    <div class="card">
+      <h3>Incoming Issues</h3>
+      <ul id="polIssues"></ul>
+    </div>
+
+    <div class="card">
+      <h3>Post Update</h3>
+      <textarea id="polUpdate" placeholder="Post an update for citizens..."></textarea>
+      <button class="action" onclick="postUpdate()">Post Update</button>
+      <ul id="updateList"></ul>
+    </div>
+  </section>
+
+  <!-- Moderator Section -->
+  <section id="moderator">
+    <h2>Moderator Dashboard</h2>
+    <div class="card">
+      <h3>Pending Posts/Reports</h3>
+      <ul id="moderationQueue"></ul>
+      <p>✅ Approve or ❌ Reject reported content to maintain healthy discussions.</p>
+    </div>
+  </section>
+
+  <!-- Admin Section -->
+  <section id="admin">
+    <h2>Admin Dashboard</h2>
+    <div class="card">
+      <h3>Manage Users</h3>
+      <p>Admins can oversee all user roles and platform operations.</p>
+      <ul>
+        <li>✅ Approve new politicians</li>
+        <li>👤 Assign or remove moderators</li>
+        <li>🧾 View activity logs</li>
+      </ul>
+    </div>
+  </section>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+    }
+
+    function submitIssue() {
+      const title = document.getElementById('issueTitle').value;
+      const desc = document.getElementById('issueDesc').value;
+      if(!title || !desc) {
+        alert("Please fill in both fields!");
+        return;
+      }
+      const li = document.createElement('li');
+      li.textContent = `${title} - ${desc}`;
+      document.getElementById('issueList').appendChild(li);
+      const polLi = document.createElement('li');
+      polLi.textContent = `${title}: ${desc}`;
+      document.getElementById('polIssues').appendChild(polLi);
+      document.getElementById('issueTitle').value = '';
+      document.getElementById('issueDesc').value = '';
+    }
+
+    function postUpdate() {
+      const update = document.getElementById('polUpdate').value;
+      if(!update) return alert("Write something first!");
+      const li = document.createElement('li');
+      li.textContent = update;
+      document.getElementById('updateList').appendChild(li);
+      document.getElementById('polUpdate').value = '';
+    }
+  </script>
+</body>
+</html>
